@@ -1,5 +1,5 @@
 ﻿using MeuChat.Classes;
-using System.Threading.Tasks;
+using MeuChat.Pagina;
 
 namespace MeuChat;
 
@@ -8,6 +8,11 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
         CarregaLista();
     }
 
@@ -40,4 +45,9 @@ public partial class MainPage : ContentPage
         }
     }
 
+    private void CVLista_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var contato = e.CurrentSelection.FirstOrDefault() as Pessoas;
+        Navigation.PushAsync(new Contato(contato));
+    }
 }

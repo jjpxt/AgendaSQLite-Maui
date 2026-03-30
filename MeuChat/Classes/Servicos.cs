@@ -16,7 +16,14 @@ public class Servicos
 
     public Task<int> SalvarPessoa(Pessoas pessoas)
     {
-        return _bancodedados.InsertAsync(pessoas);
+        if(pessoas.Id != 0)
+        {
+            return _bancodedados.UpdateAsync(pessoas);
+        }
+        else
+        {
+            return _bancodedados.InsertAsync(pessoas);
+        }
     }
 
     public Task<List<Pessoas>> ListarPessoas()
