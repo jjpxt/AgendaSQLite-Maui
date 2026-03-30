@@ -1,15 +1,20 @@
 ﻿using MeuChat.Classes;
 using MeuChat.Pagina;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace MeuChat;
 
 public partial class MainPage : ContentPage
 {
     private bool deslizar = false;
-
+    private ObservableCollection<Pessoas> pessoas;
     public MainPage()
     {
         InitializeComponent();
+        pessoas = new ObservableCollection<Pessoas>();
+
+        BindingContext = this;
     }
 
     protected override void OnAppearing()
@@ -18,9 +23,16 @@ public partial class MainPage : ContentPage
         CarregaLista();
     }
 
-    public void CarregaLista()
+    public async Task CarregaLista()
     {
-        var pessoas = App.BancoDeDados.ListarPessoas().Result;
+        var listaPessoas = await App.BancoDeDados.ListarPessoas();
+        pessoas.Clear();
+
+        foreach (var pessoa in listaPessoas)
+        {
+            pessoas.Add(pessoa);
+        }
+
         CVLista.ItemsSource = pessoas;
     }
 
@@ -39,7 +51,7 @@ public partial class MainPage : ContentPage
             await App.BancoDeDados.SalvarPessoa(pessoa);
             await DisplayAlert("Sucesso", "Salvo com sucesso", "Ok");
 
-            CarregaLista();
+            pessoas.Add(pessoa);
         }
         catch(Exception ex)
         {
@@ -63,7 +75,8 @@ public partial class MainPage : ContentPage
         {
             await App.BancoDeDados.ApagarPessoa(item);
             await DisplayAlert("Apagado", "Contato apagado com sucesso", "Ok");
-            CarregaLista();
+
+            pessoas.Remove(item);
         }
         else
         {
