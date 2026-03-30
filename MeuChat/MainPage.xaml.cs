@@ -5,6 +5,8 @@ namespace MeuChat;
 
 public partial class MainPage : ContentPage
 {
+    private bool deslizar = false;
+
     public MainPage()
     {
         InitializeComponent();
@@ -47,7 +49,35 @@ public partial class MainPage : ContentPage
 
     private void CVLista_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        if (deslizar) return;
+
         var contato = e.CurrentSelection.FirstOrDefault() as Pessoas;
         Navigation.PushAsync(new Contato(contato));
+    }
+
+    private async void SwipeItem_Invoked(object sender, EventArgs e)
+    {
+        var item = ((SwipeItem)sender).BindingContext as Pessoas;
+        var resposta = await DisplayAlert("Apagar", "Deseja apagar o contato?", "Sim", "Não");
+        if (resposta)
+        {
+            await App.BancoDeDados.ApagarPessoa(item);
+            await DisplayAlert("Apagado", "Contato apagado com sucesso", "Ok");
+            CarregaLista();
+        }
+        else
+        {
+            await DisplayAlert("Cancelado", "Operação cancelada", "Ok");
+        }
+    }
+
+    private void SwipeView_SwipeStarted(object sender, SwipeStartedEventArgs e)
+    {
+        deslizar = true;
+    }
+
+    private void SwipeView_SwipeEnded(object sender, SwipeEndedEventArgs e)
+    {
+        deslizar = false;
     }
 }

@@ -10,6 +10,10 @@
             <CollectionView x:Name="CVLista" SelectionChanged="CVLista_SelectionChanged" SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
+                        <SwipeView SwipeStarted="SwipeView_SwipeStarted" SwipeEnded="SwipeView_SwipeEnded">
+                            <SwipeView.RightItems>
+                                <SwipeItem Text="Apagar" BackgroundColor="Red" Invoked="SwipeItem_Invoked"/>
+                            </SwipeView.RightItems>
                         <Border BackgroundColor="CadetBlue">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="10"/>
@@ -19,6 +23,7 @@
                                 <Label Text="{Binding Email}"/>
                             </VerticalStackLayout>
                         </Border>
+                        </SwipeView>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

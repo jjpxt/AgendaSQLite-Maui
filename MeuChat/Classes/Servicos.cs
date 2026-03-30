@@ -30,4 +30,17 @@ public class Servicos
     {
         return _bancodedados.Table<Pessoas>().ToListAsync();
     }
+
+    public async Task<bool> ApagarPessoa(Pessoas pessoas)
+    {
+        try
+        {
+            await _bancodedados.DeleteAsync(pessoas);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }
