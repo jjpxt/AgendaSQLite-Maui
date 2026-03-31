@@ -1,4 +1,5 @@
-﻿using MeuChat.Classes;
+﻿using CommunityToolkit.Maui.Views;
+using MeuChat.Classes;
 using MeuChat.Pagina;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -59,12 +60,17 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void CVLista_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void CVLista_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        var popup = new Aguarde();
+        this.ShowPopup(popup);
+
         if (deslizar) return;
 
         var contato = e.CurrentSelection.FirstOrDefault() as Pessoas;
-        Navigation.PushAsync(new Contato(contato));
+        await Navigation.PushAsync(new Contato(contato));
+        await Task.Delay(3000);
+        popup.Close();
     }
 
     private async void SwipeItem_Invoked(object sender, EventArgs e)
@@ -92,5 +98,17 @@ public partial class MainPage : ContentPage
     private void SwipeView_SwipeEnded(object sender, SwipeEndedEventArgs e)
     {
         deslizar = false;
+    }
+
+    private async void SBNome_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        string nome = SBNome.Text;
+        var lista = await App.BancoDeDados.BuscaNome(nome);
+        pessoas.Clear();
+
+        foreach(var item in lista)
+        {
+            pessoas.Add(item);
+        }
     }
 }

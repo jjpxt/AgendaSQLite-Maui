@@ -43,4 +43,11 @@ public class Servicos
             return false;
         }
     }
+
+    public async Task<List<Pessoas>> BuscaNome(string nome)
+    {
+        return await _bancodedados.Table<Pessoas>()
+            .Where(p => p.Nome.ToLower().Contains(nome.ToLower()))
+            .ToListAsync();
+    }
 }

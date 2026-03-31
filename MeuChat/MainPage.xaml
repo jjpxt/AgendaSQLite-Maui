@@ -7,6 +7,7 @@
     
     <ScrollView> 
         <VerticalStackLayout Padding="30,0" Spacing="25" >
+            <SearchBar x:Name="SBNome" Placeholder="Digite o nome" TextChanged="SBNome_TextChanged"/>
             <CollectionView x:Name="CVLista" SelectionChanged="CVLista_SelectionChanged" SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
